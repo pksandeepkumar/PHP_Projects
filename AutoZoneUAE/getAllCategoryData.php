@@ -1,6 +1,7 @@
 <?php
 /**
  * This php returns all category with ites item
+ * 
  */
 
     include_once 'db_functions.php';
@@ -45,36 +46,52 @@
 								 break;
 							 }
 						 }
+						 
+						 //Reading product images
+						 
+						 
+						 
+						 
+						 
+						 
 						 //Reading product image id from post meta data
 						 $dbProductImageID = $db->getProductImageID($product_id); 
+						 echo 'productId :' , $product_id ;
 						 if ($dbProductImageID != false){ 
+							  $imageIDsString = "";
+							  //Reading the image ids and make it as a string with coma seperation
+							  while ($rowProductImageId = mysql_fetch_array($dbProductImageID)) {
+									$productImageIds = $rowProductImageId["meta_value"];
+									$imageIDsString = $imageIDsString . "," . $productImageIds;
+							 }
+							 echo 'imageIDsString :' , $imageIDsString ;
+							 echo '<br>'  ;
+							 $splitArray = explode(',', $imageIDsString);
 							 
-							 while ($rowProductImageId = mysql_fetch_array($dbProductImageID)) {
-								 $productImageIds = $rowProductImageId["meta_value"];
-								 
-								 $splitArray = explode(',', $productImageIds);
-								 $product_image_array_parent = array();
-								 foreach($splitArray as $image_id){
+							 $product_image_array_parent = array();	 
+							 foreach($splitArray as $image_id){ 
+									 //echo 'productId :' , $product_id ;
+									 echo 'image_id :' , $image_id ;
+									 
 									 //echo 'image_id :' , $image_id ;
 									 //Reading product image data from post
-									 $dbProductImageData = $db->getProductData($image_id); 
-									 $product_image_array = array();
+								$dbProductImageData = $db->getProductData($image_id); 
 									 
-									 if ($dbProductImageData != false){ 
-										 while ($rowProductImageData = mysql_fetch_array($dbProductImageData)) {
-											 $product_image_array["image_url"] = $rowProductImageData["guid"];
-											 break;
-										 }
-									 }
-									 array_push($product_image_array_parent, $product_image_array);
+								$product_image_array = array();	 
+								if ($dbProductImageData != false){ 
+									while ($rowProductImageData = mysql_fetch_array($dbProductImageData)) {
+										$product_image_array["image_url"] = "image ID:" . $image_id ." " . $rowProductImageData["guid"];
+										break;
+									}
+									array_push($product_image_array_parent, $product_image_array);
+								}
+								
 									 
-								 }
-								 $product_array["images"] = $product_image_array_parent;
-								 break;
-							 }
+							}
+							  $product_array["images"] = $product_image_array_parent;
 						 }
 						 
-						 //Reading product details
+						
 						 
 						 
 						 

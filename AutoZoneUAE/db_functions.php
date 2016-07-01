@@ -88,7 +88,8 @@ die(mysql_error())      ;
     	
     	//Returns product image ids as string like 21,22,23
     	public function getProductImageID($post_id) {
-        $result = mysql_query("SELECT * FROM `wp_postmeta` WHERE `post_id` = $post_id AND `meta_key` LIKE '_product_image_gallery'");
+        $result = mysql_query("SELECT * FROM `wp_postmeta` WHERE `post_id` = $post_id AND (`meta_key` 
+        LIKE '_product_image_gallery' OR `meta_key` LIKE '_thumbnail_id'  )");
         return $result;
     	}
     	
